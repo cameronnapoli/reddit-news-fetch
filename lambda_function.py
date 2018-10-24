@@ -2,12 +2,13 @@ import json
 import praw
 from datetime import datetime
 
+from keys import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET
 
 TOP_N = 25
 
 def get_top_25_reddit_news():
-    reddit = praw.Reddit(client_id=CLIENT_ID,
-                         client_secret=CLIENT_SECRET,
+    reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,
+                         client_secret=REDDIT_CLIENT_SECRET,
                          user_agent='web')
 
     subreddit = reddit.subreddit('news').hot(limit=TOP_N)
@@ -21,7 +22,7 @@ def get_top_25_reddit_news():
 
 def write_news_to_file(news):
     todays_date = datetime.now().strftime("%Y-%m-%d")
-    filename = "reddit_scrape/dat.csv"
+    filename = "dat.csv"
 
     with open(filename, 'a') as file:
         print("\t* writing data to '%s'" % str(filename))
@@ -39,3 +40,6 @@ def lambda_handler(event, context):
         "statusCode": 200,
         "body": json.dumps('Hello from Lambda!!!')
     }
+
+if __name__=="__main__":
+    lambda_handler(None, None)
