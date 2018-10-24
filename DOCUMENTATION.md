@@ -11,13 +11,18 @@ First an AWS lambda function must be created and the source must be properly zip
 
     cd ~/Code/news_fetch_lambda/virtualenv/lib/python3.5/site-packages
     zip -r9 ~/Downloads/RedditNews.zip .
-    
+
 **Add python code to zip**
 
     cd ~/Code/news_fetch_lambda/
 	zip -g ~/Downloads/RedditNews.zip lambda_function.py
-	
+
 ## Configure Role for Lambda
+
+...
+
+
+## Add Environment Variables to Lambda
 
 ...
 
