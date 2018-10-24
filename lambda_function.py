@@ -1,17 +1,33 @@
 import json
 import praw
+import boto3
+import os
 from datetime import datetime
 
-from keys import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET
 
-TOP_N = 25
+def get_keys_from_environ():
+    return (os.environ['REDDIT_CLIENT_ID'], os.environ['REDDIT_CLIENT_SECRET'])
+def get_bucket_name():
+    return os.environ['BUCKET_NAME']
 
-def get_top_25_reddit_news():
+
+def get_top_n_reddit_news(top_n):
+    """
+    Fetch top n reddit headlines.
+
+    Args:
+        top_n (int): number of headlines to return
+
+    Returns:
+        list[list]: a list of length three lists. Each sublist contains id, score, title
+    """
+    REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET = get_keys_from_environ()
+
     reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,
                          client_secret=REDDIT_CLIENT_SECRET,
                          user_agent='web')
 
-    subreddit = reddit.subreddit('news').hot(limit=TOP_N)
+    subreddit = reddit.subreddit('news').hot(limit=top_n)
 
     result = []
     for s in subreddit:
@@ -20,26 +36,45 @@ def get_top_25_reddit_news():
     return result
 
 
-def write_news_to_file(news):
-    todays_date = datetime.now().strftime("%Y-%m-%d")
-    filename = "dat.csv"
+def write_news_to_s3(news):
+    """
+    Write news article headlines to CSV file in S3
 
-    with open(filename, 'a') as file:
-        print("\t* writing data to '%s'" % str(filename))
-        for entry in news:
-            csv_entry = [unicode(todays_date)] + [u'"' + unicode(x) + u'"' for x in entry]
-            line = u",".join(csv_entry)
-            file.write(line.encode('utf-8'))
-            file.write(u"\n")
+    Args:
+        news (list[list]): takes the output of get_top_n_reddit_news()
+
+    Returns:
+        None
+    """
+
+    todays_date = datetime.now().strftime("%Y-%m-%d")
+    filename = "data_{0}.csv".format(todays_date)
+
+    s3 = boto3.resource('s3')
+
+    data = "Date,ID,Score,Title\n"
+    for entry in news:
+        line_entry = [str(todays_date)] + ['"' + str(x) + '"' for x in entry]
+        line = ",".join(line_entry) + "\n"
+        data += line
+
+    bucket_name = get_bucket_name()
+    s3.Bucket(bucket_name).put_object(Key=filename, Body=data)
 
 
 def lambda_handler(event, context):
-    news = get_top_25_reddit_news()
-    write_news_to_file(news)
+    """
+    Invoked function for Amazon Lambda
+    """
+    NUM_ARTICLES = 50
+
+    news = get_top_n_reddit_news(NUM_ARTICLES)
+    print("Fetched {0} headlines.".format(NUM_ARTICLES))
+
+    write_news_to_s3(news)
+    print("Wrote news to S3.")
+
     return {
         "statusCode": 200,
-        "body": json.dumps('Hello from Lambda!!!')
+        "body": "Successfully wrote {0} headlines to S3.".format(len(news))
     }
-
-if __name__=="__main__":
-    lambda_handler(None, None)
