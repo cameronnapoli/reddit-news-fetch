@@ -2,7 +2,7 @@
 
 ### Description
 
-...
+Data fetching application example using AWS Lambda.
 
 ### Dependencies
 

@@ -19,14 +19,23 @@ First an AWS lambda function must be created and the source must be properly zip
 
 ## Configure Role for Lambda
 
-...
+In order for the script to write to S3, you will need a role with the proper permissions. I created a role and added the `AmazonS3FullAccess` policy.
 
+
+## Setup Reddit Application
+
+To read from the Reddit API, you must get your applcation keys [here](https://github.com/reddit-archive/reddit/wiki/OAuth2).
 
 ## Add Environment Variables to Lambda
 
-...
+Three environment variables are needed to run the script:
 
+`BUCKET_NAME` : This is the name of the S3 bucket in which to deposit files
+
+`REDDIT_CLIENT_ID` : Client ID from your registered Reddit App.
+
+`REDDIT_CLIENT_SECRET` : Client secret from your registered Reddit App.
 
 ## Create Cloudwatch Daily Trigger
 
-...
+I used cloudwatch to trigger this task once daily. This cron expression will configure the trigger to run once daily at 9AM: `0 16 * * ? *`.
