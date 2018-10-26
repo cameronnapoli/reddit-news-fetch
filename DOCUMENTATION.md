@@ -9,12 +9,12 @@ First an AWS lambda function must be created and the source must be properly zip
 
 **Create Deployment zip file**
 
-    cd ~/Code/news_fetch_lambda/virtualenv/lib/python3.5/site-packages
+    cd ~/{path_to_repository}/virtualenv/lib/python3.5/site-packages
     zip -r9 ~/Downloads/RedditNews.zip .
 
 **Add python code to zip**
 
-    cd ~/Code/news_fetch_lambda/
+    cd ~/{path_to_repository}/
 	zip -g ~/Downloads/RedditNews.zip lambda_function.py
 
 ## Configure Role for Lambda
@@ -36,6 +36,10 @@ Three environment variables are needed to run the script:
 
 `REDDIT_CLIENT_SECRET` : Client secret from your registered Reddit App.
 
+`FETCH_COUNT` : Number of articles to fetch.
+
 ## Create Cloudwatch Daily Trigger
 
-I used cloudwatch to trigger this task once daily. This cron expression will configure the trigger to run once daily at 9AM: `0 16 * * ? *`.
+I used cloudwatch to trigger this task once daily. This cron expression will configure the trigger to run once daily at 9AM:
+
+    0 16 * * ? *

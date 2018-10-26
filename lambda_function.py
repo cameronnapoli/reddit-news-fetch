@@ -1,33 +1,36 @@
-import json
 import praw
 import boto3
 import os
 from datetime import datetime
 
 
-def get_keys_from_environ():
-    return (os.environ['REDDIT_CLIENT_ID'], os.environ['REDDIT_CLIENT_SECRET'])
+def get_reddit_keys():
+    return os.environ["REDDIT_CLIENT_ID"], os.environ["REDDIT_CLIENT_SECRET"]
+
+
 def get_bucket_name():
-    return os.environ['BUCKET_NAME']
+    return os.environ["BUCKET_NAME"]
 
 
-def get_top_n_reddit_news(top_n):
+def get_fetch_count():
+    return int(os.environ["FETCH_COUNT"])
+
+
+def get_top_reddit_news():
     """
     Fetch top n reddit headlines.
-
-    Args:
-        top_n (int): number of headlines to return
 
     Returns:
         list[list]: a list of length three lists. Each sublist contains id, score, title
     """
-    REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET = get_keys_from_environ()
+    reddit_client_id, reddit_client_secret = get_reddit_keys()
+    fetch_count = get_fetch_count()
 
-    reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,
-                         client_secret=REDDIT_CLIENT_SECRET,
-                         user_agent='web')
+    reddit = praw.Reddit(client_id=reddit_client_id,
+                         client_secret=reddit_client_secret,
+                         user_agent="web")
 
-    subreddit = reddit.subreddit('news').hot(limit=top_n)
+    subreddit = reddit.subreddit("news").hot(limit=fetch_count)
 
     result = []
     for s in subreddit:
@@ -50,7 +53,7 @@ def write_news_to_s3(news):
     todays_date = datetime.now().strftime("%Y-%m-%d")
     filename = "data_{0}.csv".format(todays_date)
 
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource("s3")
 
     data = "Date,ID,Score,Title\n"
     for entry in news:
@@ -64,17 +67,16 @@ def write_news_to_s3(news):
 
 def lambda_handler(event, context):
     """
-    Invoked function for Amazon Lambda
+    Invoked function for AWS Lambda
     """
-    NUM_ARTICLES = 50
 
-    news = get_top_n_reddit_news(NUM_ARTICLES)
-    print("Fetched {0} headlines.".format(NUM_ARTICLES))
+    news = get_top_reddit_news()
+    print("Fetched {0} headlines.".format(len(news)))
 
     write_news_to_s3(news)
     print("Wrote news to S3.")
 
     return {
-        "statusCode": 200,
-        "body": "Successfully wrote {0} headlines to S3.".format(len(news))
-    }
+               "statusCode": 200,
+               "body": "Successfully wrote {0} headlines to S3.".format(len(news))
+           }
