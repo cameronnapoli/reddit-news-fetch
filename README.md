@@ -2,7 +2,7 @@
 
 ### Description
 
-Data fetching application example using AWS Lambda.
+Data fetching application example using AWS Lambda. Runs on Python 3.6.7.
 
 ### Dependencies
 
