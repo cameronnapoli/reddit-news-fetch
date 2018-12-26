@@ -11,7 +11,7 @@ Data fetching application example using AWS Lambda. Runs on Python 3.6.7.
 # Deployment Info
 
 
-## Creating Deployment File
+## Creating Deployment File (Mac/Linux)
 
 First an AWS lambda function must be created and the source must be properly zipped and uploaded.
 
