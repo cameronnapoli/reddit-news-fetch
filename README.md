@@ -50,6 +50,6 @@ Three environment variables are needed to run the script:
 
 ## Create Cloudwatch Daily Trigger
 
-I used cloudwatch to trigger this task once daily. This cron expression will configure the trigger to run once daily at 9AM:
+I used cloudwatch to trigger this task once daily. This cron expression will configure the trigger to run once daily at 4PM:
 
     0 16 * * ? *
