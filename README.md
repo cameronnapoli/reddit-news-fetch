@@ -51,6 +51,6 @@ The following environment variables are needed to run the script ([adding Lambda
 
 ## Create Cloudwatch Daily Trigger
 
-I used CloudWatch to trigger this task once daily [how to create a CloudWatch event rule](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/Create-CloudWatch-Events-Scheduled-Rule.html). This cron expression will configure the trigger to run once daily at 4PM:
+I used CloudWatch to trigger this task once daily ([how to create a CloudWatch event rule](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/Create-CloudWatch-Events-Scheduled-Rule.html)). This cron expression will configure the trigger to run once daily at 4PM:
 
     0 16 * * ? *
