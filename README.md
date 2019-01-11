@@ -6,6 +6,7 @@ Data fetching application example using AWS Lambda. Runs on Python 3.6.7.
 
 ### Dependencies
 
+    boto3
     praw
 
 # Deployment Info
