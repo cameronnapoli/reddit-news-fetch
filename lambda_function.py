@@ -26,9 +26,10 @@ def get_top_reddit_news():
     reddit_client_id, reddit_client_secret = get_reddit_keys()
     fetch_count = get_fetch_count()
 
-    reddit = praw.Reddit(client_id=reddit_client_id,
-                         client_secret=reddit_client_secret,
-                         user_agent="web")
+    reddit = praw.Reddit(
+        client_id=reddit_client_id,
+        client_secret=reddit_client_secret,
+        user_agent="web")
 
     subreddit = reddit.subreddit("news").hot(limit=fetch_count)
 
@@ -77,6 +78,6 @@ def lambda_handler(event, context):
     print("Wrote news to S3.")
 
     return {
-               "statusCode": 200,
-               "body": "Successfully wrote {0} headlines to S3.".format(len(news))
-           }
+        "statusCode": 200,
+        "body": "Successfully wrote {0} headlines to S3.".format(len(news))
+    }
