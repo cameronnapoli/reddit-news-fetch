@@ -1,5 +1,7 @@
 # Reddit Fetch Top News Fetch - AWS Lambda
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ### Description
 
 Data fetching application example using AWS Lambda. Runs on Python 3.6.7.
