@@ -1,4 +1,4 @@
-#!/Users/cameronnapoli/Downloads/RedditNewsFetch/reddit_fetch/bin/python
+#!/home/cam/code/reddit-news-fetch-aws-lambda/virtualenv/bin/python3
 
 # -*- coding: utf-8 -*-
 import re
