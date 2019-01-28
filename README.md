@@ -20,15 +20,23 @@ First an AWS lambda function must be created and the source must be properly zip
 
 [Creating a Python deployment package for AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html)
 
-**Create Deployment zip file**
-
-    cd ~/{path_to_repository}/virtualenv/lib/python3.5/site-packages
-    zip -r9 ~/Downloads/RedditNews.zip .
-
-**Add python code to zip**
+**Use virtualenv to fetch dependency source** ([How to install/use virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)):
 
     cd ~/{path_to_repository}/
-	zip -g ~/Downloads/RedditNews.zip lambda_function.py
+    virtualenv env
+    source env/bin/activate
+    pip3 install -r requirements.txt
+    deactivate
+
+**Create Deployment zip file:**
+
+    zip -r9 ~/Documents/RedditNews.zip ~/{path_to_repository}/env/lib/python3.5/site-packages
+
+**Add python code to zip:**
+
+    zip -g ~/Documents/RedditNews.zip ~/{path_to_repository}/lambda_function.py
+
+Now you can deploy the package with the `RedditNews.zip` in the `~/Documents/` folder.
 
 ## Configure Role for Lambda
 
