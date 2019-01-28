@@ -30,7 +30,7 @@ First an AWS lambda function must be created and the source must be properly zip
 
 **Create Deployment zip file:**
 
-    zip -r9 ~/Documents/RedditNews.zip ~/{path_to_repository}/env/lib/python3.5/site-packages
+    zip -r9 ~/Documents/RedditNews.zip ~/{path_to_repository}/env/lib/python3.6/site-packages
 
 **Add python code to zip:**
 
